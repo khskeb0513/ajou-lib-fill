@@ -44,6 +44,7 @@ const amazonHardcover = (): void => {
   if (newerVersion) {
     chrome.runtime.sendMessage('amazon;개정판 상품으로 이동합니다.');
     document.location.href = String(newerVersion.getAttribute('href'));
+    return;
   }
   const aButtonTexts: Element[] = [];
   document
@@ -95,6 +96,17 @@ const amazonHardcover = (): void => {
 };
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  const enabled = await chrome.storage.local.get('enabled');
+  if (enabled['enabled'] !== 'true') {
+    chrome.action.setIcon({
+      path: '../images/no_fa_icon.png',
+    });
+    return;
+  } else {
+    chrome.action.setIcon({
+      path: '../icons/16.png',
+    });
+  }
   if (changeInfo.url?.includes('amazon.com')) {
     await chrome.action.setIcon({
       path: '../images/amazon_16.png',
@@ -119,11 +131,76 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
 chrome.runtime.onMessage.addListener((message) => {
   const splitMessages = String(message).split(';');
-  chrome.notifications.create({
-    message: splitMessages[1],
-    iconUrl: `../images/${splitMessages[0]}_16.png`,
-    title: `${splitMessages[0]} detected.`,
-    type: 'basic',
-    eventTime: 2,
+  switch (splitMessages[0]) {
+    case 'amazon':
+      chrome.notifications.create({
+        message: splitMessages[1],
+        iconUrl: '../images/amazon_16.png',
+        title: 'amazon detected.',
+        type: 'basic',
+        eventTime: 2,
+      });
+      break;
+    case 'kyobo':
+      chrome.notifications.create({
+        message: splitMessages[1],
+        iconUrl: '../images/kyobo_16.png',
+        title: 'kyobo detected.',
+        type: 'basic',
+        eventTime: 2,
+      });
+      break;
+  }
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.get('enabled').then((value) => {
+    if (Object.keys(value).findIndex((value1) => value1 === 'enabled') === -1) {
+      chrome.storage.local.set({
+        enabled: 'true',
+      });
+    }
+  });
+  chrome.storage.local.get('enabled').then((value) => {
+    if (value['enabled'] !== 'true') {
+      chrome.action.setIcon({
+        path: '../images/no_fa_icon.png',
+      });
+    } else {
+      chrome.action.setIcon({
+        path: '../icons/16.png',
+      });
+    }
+  });
+});
+
+chrome.action.onClicked.addListener(() => {
+  chrome.storage.local.get('enabled').then((value) => {
+    if (Object.keys(value).findIndex((value1) => value1 === 'enabled') === -1) {
+      chrome.storage.local.set({
+        enabled: 'false',
+      });
+    }
+    chrome.action.setIcon({
+      path: '../images/no_fa_icon.png',
+    });
+    return;
+  });
+  chrome.storage.local.get('enabled').then((value) => {
+    if (value['enabled'] !== 'true') {
+      chrome.storage.local.set({
+        enabled: 'true',
+      });
+      chrome.action.setIcon({
+        path: '../icons/16.png',
+      });
+    } else {
+      chrome.storage.local.set({
+        enabled: 'false',
+      });
+      chrome.action.setIcon({
+        path: '../images/no_fa_icon.png',
+      });
+    }
   });
 });

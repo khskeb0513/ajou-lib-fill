@@ -27,6 +27,18 @@
 <b>Body</b>
 <ol>
   <li>
+    공통
+    <img src='../icons/16.png' alt='fa logo'>
+    <ul>
+      <li>
+        기능을 끄려면 아이콘을 한 번 눌러 곱표로 만드세요.
+      </li>
+      <li>
+        기능을 켜려면 아이콘을 한 번 눌러 원상복구 하세요.
+      </li>
+    </ul>
+  </li>
+  <li>
     아마존
     <img src='../images/amazon_16.png' alt='amazon logo'>
     <ul>
@@ -71,5 +83,10 @@
 <small>
   P.S. 수서 업무 화이팅!
 </small>
+<script>
+  chrome.runtime.sendMessage('get-settings').then(value => {
+    console.log(String(value))
+  })
+</script>
 </body>
 </html>

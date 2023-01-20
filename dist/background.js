@@ -48,6 +48,7 @@ const amazonHardcover = () => {
     if (newerVersion) {
         chrome.runtime.sendMessage('amazon;개정판 상품으로 이동합니다.');
         document.location.href = String(newerVersion.getAttribute('href'));
+        return;
     }
     const aButtonTexts = [];
     document
@@ -97,6 +98,18 @@ const amazonHardcover = () => {
 };
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
+    const enabled = yield chrome.storage.local.get('enabled');
+    if (enabled['enabled'] !== 'true') {
+        chrome.action.setIcon({
+            path: '../images/no_fa_icon.png',
+        });
+        return;
+    }
+    else {
+        chrome.action.setIcon({
+            path: '../icons/16.png',
+        });
+    }
     if ((_a = changeInfo.url) === null || _a === void 0 ? void 0 : _a.includes('amazon.com')) {
         yield chrome.action.setIcon({
             path: '../images/amazon_16.png',
@@ -120,11 +133,76 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => __awaiter(void 0, void 
 }));
 chrome.runtime.onMessage.addListener((message) => {
     const splitMessages = String(message).split(';');
-    chrome.notifications.create({
-        message: splitMessages[1],
-        iconUrl: `../images/${splitMessages[0]}_16.png`,
-        title: `${splitMessages[0]} detected.`,
-        type: 'basic',
-        eventTime: 2,
+    switch (splitMessages[0]) {
+        case 'amazon':
+            chrome.notifications.create({
+                message: splitMessages[1],
+                iconUrl: '../images/amazon_16.png',
+                title: 'amazon detected.',
+                type: 'basic',
+                eventTime: 2,
+            });
+            break;
+        case 'kyobo':
+            chrome.notifications.create({
+                message: splitMessages[1],
+                iconUrl: '../images/kyobo_16.png',
+                title: 'kyobo detected.',
+                type: 'basic',
+                eventTime: 2,
+            });
+            break;
+    }
+});
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.storage.local.get('enabled').then((value) => {
+        if (Object.keys(value).findIndex((value1) => value1 === 'enabled') === -1) {
+            chrome.storage.local.set({
+                enabled: 'true',
+            });
+        }
+    });
+    chrome.storage.local.get('enabled').then((value) => {
+        if (value['enabled'] !== 'true') {
+            chrome.action.setIcon({
+                path: '../images/no_fa_icon.png',
+            });
+        }
+        else {
+            chrome.action.setIcon({
+                path: '../icons/16.png',
+            });
+        }
+    });
+});
+chrome.action.onClicked.addListener(() => {
+    chrome.storage.local.get('enabled').then((value) => {
+        if (Object.keys(value).findIndex((value1) => value1 === 'enabled') === -1) {
+            chrome.storage.local.set({
+                enabled: 'false',
+            });
+        }
+        chrome.action.setIcon({
+            path: '../images/no_fa_icon.png',
+        });
+        return;
+    });
+    chrome.storage.local.get('enabled').then((value) => {
+        if (value['enabled'] !== 'true') {
+            chrome.storage.local.set({
+                enabled: 'true',
+            });
+            chrome.action.setIcon({
+                path: '../icons/16.png',
+            });
+        }
+        else {
+            chrome.storage.local.set({
+                enabled: 'false',
+            });
+            chrome.action.setIcon({
+                path: '../images/no_fa_icon.png',
+            });
+        }
     });
 });
