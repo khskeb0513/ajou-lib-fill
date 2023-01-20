@@ -31,7 +31,7 @@ const kyoboHardcover = () => {
             bookInfo.publishYear = parseInt(String((_b = v.querySelector('td')) === null || _b === void 0 ? void 0 : _b.textContent).split('년')[0], 10);
         }
     });
-    const clipboardValue = `${bookInfo.publishYear}  ${bookInfo.isbn13}`;
+    const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
     navigator.clipboard.writeText(clipboardValue);
 };
 const amazonHardcover = () => {
@@ -67,7 +67,7 @@ const amazonHardcover = () => {
                 bookInfo.publishYear = parseInt(text.split(',')[1], 10);
             }
         });
-        const clipboardValue = `${bookInfo.publishYear}  ${bookInfo.isbn13}`;
+        const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
         navigator.clipboard.writeText(clipboardValue);
     };
     if (!document.location.href.includes('#detailBullets_feature_div')) {
