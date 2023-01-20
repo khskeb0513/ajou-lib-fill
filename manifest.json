@@ -1,18 +1,26 @@
 {
   "name": "발행년도 및 ISBN 추출기",
   "action": {},
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
   "manifest_version": 3,
   "version": "0.1",
   "description": "아마존 및 교보문고에서 발행년도와 ISBN을 추출하여 클립보드에 복사하는 확장프로그램",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "notifications"
   ],
   "host_permissions": [
     "*://*/*"
   ],
   "background": {
     "service_worker": "dist/background.js"
-  }
+  },
+  "options_page": "options/options.html"
 }
 

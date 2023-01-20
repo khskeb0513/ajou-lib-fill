@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>발행년도 및 ISBN 추출기</title>
+  <style>
+      a {
+          color: black;
+          margin: 0 4px;
+      }
+
+      code {
+          margin: 0 2px;
+      }
+  </style>
+</head>
+<body>
+<h1>
+  <img src='../icons/32.png' alt='fa_logo' />
+  발행년도 및 ISBN 추출기
+</h1>
+<hr>
+<b>Abstract</b>
+<p>
+  이 확장프로그램은 아마존 및 교보문고에서 발행년도와 ISBN을 추출하여 클립보드에 복사합니다.
+</p>
+<b>Body</b>
+<ol>
+  <li>
+    아마존
+    <img src='../images/amazon_16.png' alt='amazon logo'>
+    <ul>
+      <li>
+        아마존 접속 시 아이콘이 아마존 로고로 바뀝니다.
+      </li>
+      <li>
+        최신판본이 있는 경우 최신판본 상품으로 이동합니다.
+      </li>
+      <li>
+        Hardcover, Paperback 순으로 상품이 있다면 이동합니다.
+      </li>
+      <li>
+        상품정보란 <code>#detailBullets_feature_div</code> 을 찾아 스크롤합니다.
+      </li>
+      <li>
+        <code>발행년도</code><code>\t</code><code>ISBN-13</code> 형식으로 클립보드에 복사합니다.
+      </li>
+    </ul>
+  </li>
+  <li>
+    교보문고
+    <img src='../images/kyobo_16.png' alt='kyobo logo'>
+    <ul>
+      <li>
+        교보문고 접속 시 아이콘이 교보문고 로고로 바뀝니다.
+      </li>
+      <li>
+        최신판본이 있는 경우 최신판본 상품으로 이동합니다.
+      </li>
+      <li>
+        <code>발행년도</code><code>\t</code><code>ISBN-13</code> 형식으로 클립보드에 복사합니다.
+      </li>
+    </ul>
+  </li>
+</ol>
+<b>Author</b>
+<p>
+  <a href='mailto:khskeb0513@gmail.com'>Hyeonseung Kang &lt;khskeb0513@gmail.com&gt;</a>
+  <a href='https://github.com/khskeb0513/ajou-lib-fill'>(https://github.com/khskeb0513/ajou-lib-fill)</a>
+</p>
+<small>
+  P.S. 수서 업무 화이팅!
+</small>
+</body>
+</html>

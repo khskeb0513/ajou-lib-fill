@@ -3,13 +3,16 @@ const kyoboHardcover = (): void => {
     isbn13 = 0;
     publishYear = 0;
   }
+
   const aElements: Element[] = [];
   document.querySelectorAll('a').forEach((v) => aElements.push(v));
   const newerVersion = aElements.find((v) =>
     String(v.textContent).includes('개정판보기'),
   );
   if (newerVersion) {
+    chrome.runtime.sendMessage('kyobo;개정판 상품으로 이동합니다.');
     document.location.href = newerVersion.getAttribute('href') as string;
+    return;
   }
   const bookInfo = new BookInfo();
   document.querySelectorAll('tr').forEach((v) => {
@@ -28,6 +31,7 @@ const kyoboHardcover = (): void => {
   });
   const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
   navigator.clipboard.writeText(clipboardValue);
+  chrome.runtime.sendMessage(`kyobo;${clipboardValue} copied.`);
 };
 
 const amazonHardcover = (): void => {
@@ -35,8 +39,10 @@ const amazonHardcover = (): void => {
     isbn13 = 0;
     publishYear = 0;
   }
+
   const newerVersion = document.querySelector('#newer-version a.a-size-base');
   if (newerVersion) {
+    chrome.runtime.sendMessage('amazon;개정판 상품으로 이동합니다.');
     document.location.href = String(newerVersion.getAttribute('href'));
   }
   const aButtonTexts: Element[] = [];
@@ -66,10 +72,12 @@ const amazonHardcover = (): void => {
     });
     const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
     navigator.clipboard.writeText(clipboardValue);
+    chrome.runtime.sendMessage(`amazon;${clipboardValue} copied.`);
   };
   if (!document.location.href.includes('#detailBullets_feature_div')) {
     document.location.href =
       document.location.href + '#detailBullets_feature_div';
+    return;
   }
   if (hardcoverElements.length === 0) {
     return;
@@ -82,6 +90,7 @@ const amazonHardcover = (): void => {
     extractBookInfo();
   } else {
     document.location.href = href + '#detailBullets_feature_div';
+    chrome.runtime.sendMessage('amazon;하드커버 상품으로 이동합니다.');
   }
 };
 
@@ -106,4 +115,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
       func: kyoboHardcover,
     });
   }
+});
+
+chrome.runtime.onMessage.addListener((message) => {
+  const splitMessages = String(message).split(';');
+  chrome.notifications.create({
+    message: splitMessages[1],
+    iconUrl: `../images/${splitMessages[0]}_16.png`,
+    title: `${splitMessages[0]} detected.`,
+    type: 'basic',
+    eventTime: 2,
+  });
 });
