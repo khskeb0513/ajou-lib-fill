@@ -26,7 +26,7 @@ const kyoboHardcover = (): void => {
       );
     }
   });
-  const clipboardValue = `${bookInfo.publishYear}  ${bookInfo.isbn13}`;
+  const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
   navigator.clipboard.writeText(clipboardValue);
 };
 
@@ -64,7 +64,7 @@ const amazonHardcover = (): void => {
         bookInfo.publishYear = parseInt(text.split(',')[1], 10);
       }
     });
-    const clipboardValue = `${bookInfo.publishYear}  ${bookInfo.isbn13}`;
+    const clipboardValue = `${bookInfo.publishYear}\t${bookInfo.isbn13}`;
     navigator.clipboard.writeText(clipboardValue);
   };
   if (!document.location.href.includes('#detailBullets_feature_div')) {
