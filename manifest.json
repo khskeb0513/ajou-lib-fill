@@ -3,7 +3,7 @@
   "action": {},
   "manifest_version": 3,
   "version": "0.1",
-  "description": "Turns the page red when you click the icon",
+  "description": "아마존 및 교보문고에서 발행년도와 ISBN을 추출하여 클립보드에 복사하는 확장프로그램",
   "permissions": [
     "activeTab",
     "scripting"
